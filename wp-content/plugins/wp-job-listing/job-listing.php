@@ -30,7 +30,27 @@ if(!defined('ABSPATH')) {
     exit;
 }
 function dwwp_register_post_type() {
-    $args = array('public' => true, 'label' => 'Job Listing');
+    $singular = 'Job Listing';
+    $plural = 'Job listings';
+
+    $labels = array(
+        'name'                  => $plural,
+        'singular_name'         => $singular,
+        'add_name'              => 'Add new',
+        'add_new_item'          => 'Add New ' . $singular,
+        'edit'                  => 'Edit',
+        'edit_item'             => 'Edit ' . $singular,
+        'new_item'              => 'New ' . $singular,
+        'view'                  => 'View ' . $singular,
+        'view_item'             => 'View ' . $singular,
+        'search_item'           => 'Search ' . $plural,
+        'parent'                => 'Parent ' . $singular,
+        'not_found'             => 'No ' . $plural . ' found',
+        'not_found_in_trash'    => 'No ' . $plural . ' in Trash'
+    );
+    $args = array(
+        'labels' => $labels,
+    );
     register_post_type('job', $args);
 }
 add_action('init', 'dwwp_register_post_type');
