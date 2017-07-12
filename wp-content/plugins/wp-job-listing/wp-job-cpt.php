@@ -44,11 +44,11 @@ function dwwp_register_post_type() {
             'pages'     => 'true', // easy pagination set up
             'feeds'     => true, // whether you want it to be in rss feed
         ),
-        'supports'               => array( // lists things you want to see in the post edit screen
-            'title',
-            'editor',
+        'supports'               => array( // list of metaboxes you want to see in the post edit screen (default metaboxes), custom ones will be added wth require/inculde
+            'title' // we just need the title
+           /* 'editor',
             'author',
-            'custom-fields'
+            'custom-fields'*/
         )
     );
     register_post_type('job', $args);
