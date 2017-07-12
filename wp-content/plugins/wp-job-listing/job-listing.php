@@ -35,3 +35,5 @@ var_dump($dir); -- see what does plugin_dir_path does
 die();*/
 
 require_once (plugin_dir_path(__File__) . 'wp-job-cpt.php'); // plugin_dir_path - makes sure that the file chosen is in the correct directory
+require_once (plugin_dir_path(__File__) . 'wp-job-render-admin.php');
+require_once (plugin_dir_path(__File__) . 'wp-job-fields.php');
