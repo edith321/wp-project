@@ -87,14 +87,38 @@ add_action('init', 'dwwp_register_post_type');
 
 function dwwp_register_taxonomy() {
 
+        $plural = __('Locations');
+        $singular = __('Location');
+        $slug = str_replace( ' ', '_', strtolower( $singular ) );
+
+        $labels = array (
+            'name'                       => $plural,
+            'singular_name'              => $singular,
+            'search_items'               => __('Search ') . $plural,
+            'popular_items'              => __('Popular ') . $plural,
+            'all_items'                  => __('All ') . $plural,
+            'parent_item'                => null,
+            'parent_item_colon'          => null,
+            'edit_item'                  => __('Edit ') . $singular,
+            'update_item'                => __('Update ') . $singular,
+            'add_new_item'               => __('Add New ') . $singular,
+            'new_item_name'              => __('New ') . $singular . __(' Name'),
+            'separate_items_with_commas' => __('Separate ') . $plural . __(' with commas'),
+            'add_or_remove_items'        => __('Add or remove ') . $plural,
+            'choose_from_most_used'      => __('Choose from the most used ') . $plural,
+            'not_found'                  => __('No ') . $plural . __(' found.'),
+            'menu_name'                  => $plural,
+
+        );
+
         $args = array(
-            'hierarchical'          => true,
+            'hierarchical'          => true, // true - parent-child connections
             'labels'                => $labels,
-            'show_ui'               => true,
-            'show_admin_column'     => true,
-            'update_count_callback' => '_update_post_term_count',
+            'show_ui'               => true, // if you can see in the dashboard
+            'show_admin_column'     => true, // if you can see in the dashboard
+            'update_count_callback' => '_update_post_term_count', //
             'query_var'             => true,
-            'rewrite'               => array('slug' => 'location'),
+            'rewrite'               => array('slug' => $slug), // rewrite slug
         );
         register_taxonomy('location', 'job', $args);
 }
