@@ -12,16 +12,19 @@ function dwwp_add_custom_metabox() {
 }
 add_action('add_meta_boxes', 'dwwp_add_custom_metabox');
 
-function dwwp_meta_callback() {
+function dwwp_meta_callback($post) {
+    wp_nonce_field(basename(__FILE__), 'dwwp_jobs_nonce'); // nonce - number used once, security for data being saved in db (ensures, that data is coming from the site and not somewhere else)
+    $dwwp_stored_meta = get_post_meta($post->ID);
+
     ?>
 
     <div>
         <div class="meta-row">
             <div class="meta-th">
-                <label for="job-id" class="dwwp-row-title">Job ID</label>
+                <label for="job_id" class="dwwp-row-title">Job ID</label>
             </div>
             <div class="meta-td">
-                <input type="text" name="job-id" id="job-id" value=""/>
+                <input type="text" name="job_id" id="job_id" value="<?php if(!empty($dwwp_stored_meta['job_id'])) echo esc_attr($dwwp_stored_meta['job_id'][0]); ?>"/>  <!--if this is not empty, insert from db-->
             </div>
         </div>
         <div class="meta-row">
@@ -29,7 +32,7 @@ function dwwp_meta_callback() {
                 <label for="date_listed" class="dwwp-row-title">Date Listed</label>
             </div>
             <div class="meta-td">
-                <input type="text" name="date_listed" id="date_listed" value=""/>
+                <input type="text" name="date_listed" id="date_listed" value="<?php if(!empty($dwwp_stored_meta['date_listed'])) echo esc_attr($dwwp_stored_meta['date_listed'][0]); ?>"/>
             </div>
         </div>
         <div class="meta-row">
@@ -37,7 +40,7 @@ function dwwp_meta_callback() {
                 <label for="application_deadline" class="dwwp-row-title">Application Deadline</label>
             </div>
             <div class="meta-td">
-                <input type="text" name="application_deadline" id="application_deadline" value=""/>
+                <input type="text" name="application_deadline" id="application_deadline" value="<?php if(!empty($dwwp_stored_meta['application_deadline'])) echo esc_attr($dwwp_stored_meta['application_deadline'][0]); ?>"/>
             </div>
         </div>
         <div class="meta">
@@ -86,4 +89,28 @@ function dwwp_meta_callback() {
     </div>
     <?php
 }
+function dwwp_meta_save($post_id) {
+
+    $is_autosave = wp_is_post_autosave($post_id); // checks if a post is autosave
+    $is_revision = wp_is_post_revision($post_id); //Determines if the specified post is a revision.
+    $is_valid_nonce = (isset($_POST['dwwp_jobs_nonce']) && wp_verify_nonce($_POST['dwwp_jobs_nonce'], basename(__FILE__))) ? 'true' : 'false';
+
+
+    if($is_autosave || $is_revision || !$is_valid_nonce) {
+        return; // if any of the conditions are true, don't do anything
+    }
+    if (isset($_POST['job_id'])) { // if there is something in job_id, update it to database
+        update_post_meta($post_id, 'job_id', sanitize_text_field($_POST['job_id'])); // - safety matter - santize_text_field - Checks for invalid UTF-8, Converts single < characters to entities, Strips all tags, Removes line breaks, tabs, and extra whitespace, Strips octets
+    }
+    if (isset($_POST['date_listed'])) {
+        update_post_meta($post_id, 'date_listed', sanitize_text_field($_POST['date_listed']));
+    }
+    if (isset($_POST['application_deadline'])) {
+        update_post_meta($post_id, 'application_deadline', sanitize_text_field($_POST['application_deadline']));
+    }
+    if (isset($_POST['principle_duties'])) {
+        update_post_meta($post_id, 'principle_duties', sanitize_text_field($_POST['principle_duties']));
+    }
+}
+add_action('save_post', 'dwwp_meta_save');
 
