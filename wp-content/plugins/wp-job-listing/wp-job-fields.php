@@ -62,28 +62,38 @@ function dwwp_meta_callback($post) {
     </div>
     <div class="meta-row">
         <div class="meta-th">
-            <label for="minimum-requirements" class="wpdt-row-title"><?php _e( 'Minimum Requirements', 'hrm-textdomain' )?></label>
+            <label for="minimum-requirements" class="dwwp-row-title"><?php _e( 'Minimum Requirements', 'wp-job-listing' ) ?></label>
         </div>
         <div class="meta-td">
-            <textarea name="minimum-requirements" class ="hrm-textarea" id="minimum-requirements"><?php if ( isset ( $hrm_stored_meta['minimum-requirements'] ) ) echo esc_attr( $hrm_stored_meta['minimum-requirements'][0] ); ?></textarea>
+	          <textarea name="minimum_requirements" class="dwwp-textarea" id="minimum-requirements"><?php
+                  if ( ! empty ( $dwwp_stored_meta['minimum_requirements'] ) ) {
+                      echo esc_attr( $dwwp_stored_meta['minimum_requirements'][0] );
+                  }
+                  ?>
+	          </textarea>
         </div>
     </div>
     <div class="meta-row">
         <div class="meta-th">
-            <label for="preferred-requirements" class="wpdt-row-title"><?php _e( 'Preferred Requirements', 'hrm-textdomain' )?></label>
+            <label for="preferred-requirements" class="dwwp-row-title"><?php _e( 'Preferred Requirements', 'wp-job-listing' ) ?></label>
         </div>
         <div class="meta-td">
-            <textarea name="preferred-requirements" class ="hrm-textarea" id="preferred-requirements"><?php if ( isset ( $hrm_stored_meta['preferred-requirements'] ) ) echo esc_attr( $hrm_stored_meta['preferred-requirements'][0] ); ?></textarea>
+	          <textarea name="preferred_requirements" class="dwwp-textarea" id="preferred-requirements"><?php
+                  if ( ! empty ( $dwwp_stored_meta['preferred_requirements'] ) ) {
+                      echo esc_attr( $dwwp_stored_meta['preferred_requirements'][0] );
+                  }
+                  ?>
+	          </textarea>
         </div>
     </div>
     <div class="meta-row">
         <div class="meta-th">
-            <label for="relocation-assistance" class="prfx-row-title"><?php _e( 'Relocation Assistance', 'hrm-textdomain' )?></label>
+            <label for="relocation-assistance" class="dwwp-row-title"><?php _e( 'Relocation Assistance', 'wp-job-listing' ) ?></label>
         </div>
         <div class="meta-td">
-            <select name="relocation-assistance" id="relocation-assistance">
-                <option value="select-yes">Yes</option>';
-                <option value="select-no">No</option>';
+            <select name="relocation_assistance" id="relocation-assistance">
+                <option value="Yes" <?php if ( ! empty ( $dwwp_stored_meta['relocation_assistance'] ) ) selected( $dwwp_stored_meta['relocation_assistance'][0], 'Yes' ); ?>><?php _e( 'Yes', 'wp-job-listing' )?></option>';
+                <option value="No" <?php if ( ! empty ( $dwwp_stored_meta['relocation_assistance'] ) ) selected( $dwwp_stored_meta['relocation_assistance'][0], 'No' ); ?>><?php _e( 'No', 'wp-job-listing' )?></option>';
             </select>
         </div>
     </div>
@@ -110,6 +120,15 @@ function dwwp_meta_save($post_id) {
     }
     if (isset($_POST['principle_duties'])) {
         update_post_meta($post_id, 'principle_duties', sanitize_text_field($_POST['principle_duties']));
+    }
+    if (isset($_POST['minimum_requirements'])) {
+        update_post_meta($post_id, 'minimum_requirements', sanitize_text_field($_POST['minimum_requirements']));
+    }
+    if (isset($_POST['preferred_requirements'])) {
+        update_post_meta($post_id, 'preferred_requirements', sanitize_text_field($_POST['preferred_requirements']));
+    }
+    if (isset($_POST['relocation_assistance'])) {
+        update_post_meta($post_id, 'relocation_assistance', sanitize_text_field($_POST['relocation_assistance']));
     }
 }
 add_action('save_post', 'dwwp_meta_save');
