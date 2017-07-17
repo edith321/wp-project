@@ -1,7 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 2017.07.12
- * Time: 15:32
- */
+function reorder_admin_jobs_callback(){
+    echo 'Thisis the jobs reorder admin page';
+}

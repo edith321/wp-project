@@ -32,7 +32,7 @@ function dwwp_meta_callback($post) {
                 <label for="date_listed" class="dwwp-row-title">Date Listed</label>
             </div>
             <div class="meta-td">
-                <input type="text" class="dwwp-row-content datepicker" name="date_listed" id="date_listed" value="<?php if(!empty($dwwp_stored_meta['date_listed'])) echo esc_attr($dwwp_stored_meta['date_listed'][0]); ?>"/>
+                <input type="text" size=10 class="dwwp-row-content datepicker" name="date_listed" id="date_listed" value="<?php if(!empty($dwwp_stored_meta['date_listed'])) echo esc_attr($dwwp_stored_meta['date_listed'][0]); ?>"/>
             </div>
         </div>
         <div class="meta-row">
@@ -40,7 +40,7 @@ function dwwp_meta_callback($post) {
                 <label for="application_deadline" class="dwwp-row-title">Application Deadline</label>
             </div>
             <div class="meta-td">
-                <input type="text" class="dwwp-row-content datepicker" name="application_deadline" id="application_deadline" value="<?php if(!empty($dwwp_stored_meta['application_deadline'])) echo esc_attr($dwwp_stored_meta['application_deadline'][0]); ?>"/>
+                <input type="text" size=10 class="dwwp-row-content datepicker" name="application_deadline" id="application_deadline" value="<?php if(!empty($dwwp_stored_meta['application_deadline'])) echo esc_attr($dwwp_stored_meta['application_deadline'][0]); ?>"/>
             </div>
         </div>
         <div class="meta">
