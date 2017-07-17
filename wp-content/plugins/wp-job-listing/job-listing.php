@@ -37,3 +37,13 @@ die();*/
 require_once (plugin_dir_path(__File__) . 'wp-job-cpt.php'); // plugin_dir_path - makes sure that the file chosen is in the correct directory
 require_once (plugin_dir_path(__File__) . 'wp-job-render-admin.php');
 require_once (plugin_dir_path(__File__) . 'wp-job-fields.php');
+
+function dwwp_admin_enqueue_scripts() {
+    global $pagenow, $typenow; // $pagenow - returns the file that is being rendered??, $typenow - returns post-type
+    // we will be trying to load some scripts and css ONLY on a certain post-type (job) and ONLY when we are on a post-edit screen
+    if(($pagenow == 'post.php' || $pagenow == 'post-new.php') && $typenow == 'job') {
+        wp_enqueue_style('dwwp-admin-css', plugins_url('css/admin-jobs.css', __FILE__)); // plugin_url - works like plugin_dir_path
+        wp_enqueue_script( 'dwwwp-job-js', plugins_url('js/admin-jobs.js',  __FILE__ ), array( 'jquery', 'jquery-ui-datepicker' ), '20170717', true ); // in_footer - our script appears in the footer (faster loading), version - date, array(jquery) - we don't have to enqueue jquery separately, just have to tell wp that our new js file requires jquery
+    }
+}
+add_action('admin_enqueue_scripts', 'dwwp_admin_enqueue_scripts');
