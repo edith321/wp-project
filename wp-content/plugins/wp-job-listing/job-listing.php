@@ -41,11 +41,17 @@ require_once (plugin_dir_path(__File__) . 'wp-job-fields.php');
 function dwwp_admin_enqueue_scripts() {
     global $pagenow, $typenow; // $pagenow - returns the file that is being rendered??, $typenow - returns post-type
     // we will be trying to load some scripts and css ONLY on a certain post-type (job) and ONLY when we are on a post-edit screen
-    if(($pagenow == 'post.php' || $pagenow == 'post-new.php') && $typenow == 'job') {
+
+    if($typenow == 'job') {
         wp_enqueue_style('dwwp-admin-css', plugins_url('css/admin-jobs.css', __FILE__)); // plugin_url - works like plugin_dir_path
+    }
+    if(($pagenow == 'post.php' || $pagenow == 'post-new.php') && $typenow == 'job') {
         wp_enqueue_script( 'dwwwp-job-js', plugins_url('js/admin-jobs.js',  __FILE__ ), array( 'jquery', 'jquery-ui-datepicker' ), '20170717', true ); // in_footer - our script appears in the footer (faster loading), version - date, array(jquery) - we don't have to enqueue jquery separately, just have to tell wp that our new js file requires jquery
         wp_enqueue_script('dwwp-custom-quicktags', plugins_url('js/dwwp-quicktags.js', __FILE__ ), array('quicktags'), '20170717', true); //enqueuing quicktags (make text bold, italic etc.)
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+    }
+    if($pagenow == 'edit.php' && $typenow == 'job'){
+        wp_enqueue_script('reorder-js', plugins_url('js/reorder.js', __FILE__ ), array('jquery', 'jquery-ui-sortable'), '20170718', true); // list of handles https://developer.wordpress.org/reference/functions/wp_enqueue_script/
     }
 }
 add_action('admin_enqueue_scripts', 'dwwp_admin_enqueue_scripts');

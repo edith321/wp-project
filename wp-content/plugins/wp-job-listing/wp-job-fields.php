@@ -3,7 +3,7 @@
 function dwwp_add_custom_metabox() {
     add_meta_box(
         'dwwp_meta',
-        'Job Listing',
+        __( 'Job Listing' ),
         'dwwp_meta_callback', // what should fill the metabox
         null, // screens on which to show the box
         'normal', // where should metabox be (center or side)
@@ -21,7 +21,7 @@ function dwwp_meta_callback($post) {
     <div>
         <div class="meta-row">
             <div class="meta-th">
-                <label for="job_id" class="dwwp-row-title">Job ID</label>
+                <label for="job_id" class="dwwp-row-title"><?php _e('Job ID', 'wp-job-listing'); ?></label>
             </div>
             <div class="meta-td">
                 <input type="text" name="job_id" id="job_id" value="<?php if(!empty($dwwp_stored_meta['job_id'])) echo esc_attr($dwwp_stored_meta['job_id'][0]); ?>"/>  <!--if this is not empty, insert from db-->
@@ -29,7 +29,7 @@ function dwwp_meta_callback($post) {
         </div>
         <div class="meta-row">
             <div class="meta-th">
-                <label for="date_listed" class="dwwp-row-title">Date Listed</label>
+                <label for="date_listed" class="dwwp-row-title"><?php _e('Date Listed', 'wp-job-listing'); ?></label>
             </div>
             <div class="meta-td">
                 <input type="text" size=10 class="dwwp-row-content datepicker" name="date_listed" id="date_listed" value="<?php if(!empty($dwwp_stored_meta['date_listed'])) echo esc_attr($dwwp_stored_meta['date_listed'][0]); ?>"/>
@@ -37,7 +37,7 @@ function dwwp_meta_callback($post) {
         </div>
         <div class="meta-row">
             <div class="meta-th">
-                <label for="application_deadline" class="dwwp-row-title">Application Deadline</label>
+                <label for="application_deadline" class="dwwp-row-title"><?php _e('Application Deadline', 'wp-job-listing'); ?></label>
             </div>
             <div class="meta-td">
                 <input type="text" size=10 class="dwwp-row-content datepicker" name="application_deadline" id="application_deadline" value="<?php if(!empty($dwwp_stored_meta['application_deadline'])) echo esc_attr($dwwp_stored_meta['application_deadline'][0]); ?>"/>
@@ -45,7 +45,7 @@ function dwwp_meta_callback($post) {
         </div>
         <div class="meta">
             <div class="meta-th">
-                <span>Principle Duties</span>
+                <span><?php _e('Principle Duties', 'wp-job-listing'); ?></span>
             </div>
         </div>
         <div class="meta-editor"></div>

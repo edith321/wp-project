@@ -32,7 +32,7 @@ function reorder_admin_jobs_callback(){
                 <p><?php _e('<strong>Note:</strong> this only affects the Jobs listed using the shortcode functions')?></p>
                 <ul id="custom-type-list">
                     <?php while($job_listing->have_posts()) : $job_listing->the_post(); ?>
-                        <li id="<?php the_id(); ?>"><?php the_title(); ?></li>  <!--the_id() - gives the id of the post, the_title() - gives the title of the post-->
+                        <li id="<?php esc_attr(the_id()); ?>"><?php esc_html(the_title()); ?></li>  <!--the_id() - gives the id of the post, the_title() - gives the title of the post-->
                     <?php endwhile; ?>
             </ul>
         <?php else: ?>
@@ -40,4 +40,5 @@ function reorder_admin_jobs_callback(){
         <?php endif; ?>
         </div>
     <?php
+
 }
