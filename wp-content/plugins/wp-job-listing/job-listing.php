@@ -35,7 +35,7 @@ var_dump($dir); -- see what does plugin_dir_path does
 die();*/
 
 require_once (plugin_dir_path(__File__) . 'wp-job-cpt.php'); // plugin_dir_path - makes sure that the file chosen is in the correct directory
-require_once (plugin_dir_path(__File__) . 'wp-job-render-admin.php');
+require_once (plugin_dir_path(__File__) . 'wp-job-settings.php');
 require_once (plugin_dir_path(__File__) . 'wp-job-fields.php');
 
 function dwwp_admin_enqueue_scripts() {
@@ -50,14 +50,4 @@ function dwwp_admin_enqueue_scripts() {
 }
 add_action('admin_enqueue_scripts', 'dwwp_admin_enqueue_scripts');
 
-function dwwp_add_submenu_page() {
-    add_submenu_page(
-        'edit.php?post_type=job',// $parent_slug -  asking which parent top menu level we want it to be
-        'Reorder Jobs',
-        'Reorder Jobs', //$menu_title,
-        'manage_options', //$capability -who can access this
-        'reorder_jobs',
-        'reorder_admin_jobs_callback' // function- that displays everything
-    );
-}
-add_action('admin_menu', 'dwwp_add_submenu_page');
+
