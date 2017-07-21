@@ -52,6 +52,12 @@ function dwwp_admin_enqueue_scripts() {
     }
     if($pagenow == 'edit.php' && $typenow == 'job'){
         wp_enqueue_script('reorder-js', plugins_url('js/reorder.js', __FILE__ ), array('jquery', 'jquery-ui-sortable'), '20170718', true); // list of handles https://developer.wordpress.org/reference/functions/wp_enqueue_script/
+        wp_localize_script('reorder-js', 'WP_JOB_LISTING', array( //for safety, 'reorder-js' - has to be the handle that we mentioned in the line above, 'WP_JOB_LISTING'- just a variable name
+            'security' => wp_create_nonce('wp-job-order'), //  'wp-job-order' - jus any name
+            //'siteUrl' => get_bloginfo('url'), not necessary this time
+            'success' => 'Job sort order has been saved',
+            'failure' => 'There was an error saving or you dont have the permission',
+        ));
     }
 }
 add_action('admin_enqueue_scripts', 'dwwp_admin_enqueue_scripts');

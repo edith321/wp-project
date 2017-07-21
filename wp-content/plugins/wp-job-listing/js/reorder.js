@@ -17,15 +17,18 @@ jQuery(document).ready(function($) {
                 dataType: 'json', // datatype that will be received
                 data:{ // the actual data, that we are sending
                    action: 'save_post',  // save_post - custom name by bobby
-                    order: sortList.sortable('toArray').toString() // order - custom variable
+                    order: sortList.sortable('toArray').toString(), // order - custom variable
+                    security: WP_JOB_LISTING.security
                 },
                 success: function(response) {
+                   $('div#message').remove(); // so that success message would not dublicate
                     animation.hide();
-                    pageTitle.after('<div class="updated"><p>Job sort order has been saved</p></div>');
+                    pageTitle.after('<div id="message" class="updated"><p>' + WP_JOB_LISTING.success + '</p></div>');
                 },
                 error: function(error) {
+                    $('div#message').remove(); // so that error message would not dublicate
                     animation.hide();
-                    pageTitle.after('<div class="error"><p>There was an error saving or you dont have the permission</p></div>');
+                    pageTitle.after('<div id="message" class="error"><p>' + WP_JOB_LISTING.failure + '</p></div>');
                 }
             });
         }
