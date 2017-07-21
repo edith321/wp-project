@@ -16,14 +16,19 @@ jQuery(document).ready(function($) {
                 type: 'POST', //type of the request
                 dataType: 'json', // datatype that will be received
                 data:{ // the actual data, that we are sending
-                   action: 'save_post',  // save_post - custom name by bobby
-                    order: sortList.sortable('toArray').toString(), // order - custom variable
+                   action: 'save_sort',  // save_post - custom name by bobby
+                    order: sortList.sortable('toArray'), // order - custom variable, outputting array of id's of the dragable elements
                     security: WP_JOB_LISTING.security
                 },
                 success: function(response) {
                    $('div#message').remove(); // so that success message would not dublicate
                     animation.hide();
-                    pageTitle.after('<div id="message" class="updated"><p>' + WP_JOB_LISTING.success + '</p></div>');
+                    if(true == response.success){
+                        pageTitle.after('<div id="message" class="updated"><p>' + WP_JOB_LISTING.success + '</p></div>');
+                    } else {
+                        pageTitle.after('<div id="message" class="error"><p>' + WP_JOB_LISTING.failure + '</p></div>');
+                    }
+
                 },
                 error: function(error) {
                     $('div#message').remove(); // so that error message would not dublicate

@@ -42,3 +42,28 @@ function reorder_admin_jobs_callback(){
     <?php
 
 }
+
+function dwwp_save_reorder()
+{
+
+    if (!check_ajax_referer('wp-job-order', 'security')) {// first we have to pass the nonce name, that we created in wp-job-listing.php (wp-job-order)
+// the second thing we need to pass is the variable name, with which we defined the nonce in reorder.js ajax (security)
+        return wp_send_json_error('Invalid Nonce'); // if the nonce is not valid show error message
+    }
+    if (!current_user_can('manage_options')) {// current_user_can() - check if the person, that is trying to do smthing has access for that, manage_options - is the capability that administrator has, so we are checking if the user has the ability to manage options
+        return wp_send_json_error('You are not allowed to do this.');
+    }
+    $order = $_POST['order']; // we are saving ajax element order (with array of id's) in $order variable
+    $counter = 0;
+
+    foreach($order as $item_id) {
+        $post = array(
+            'ID' => (int)$item_id, // (int) - makes the id that is being passed an integer
+            'menu_order' => $counter
+        );
+        wp_update_post($post);
+        $counter++; // every loop it adds +1 to counter
+    }
+    wp_send_json_success('Post Saved.');
+}
+add_action('wp_ajax_save_sort', 'dwwp_save_reorder'); // we are using a dynamic hook: always starts with wp_ajax and adds the string that is defined ir reorder.js ajax function at action (save_sort)
