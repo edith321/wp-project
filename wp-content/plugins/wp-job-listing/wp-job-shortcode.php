@@ -44,16 +44,17 @@ function dwwp_list_job_by_location( $atts, $content = null) {
     }
     $atts = shortcode_atts( array(
         'title' => 'Current Job Openings in',
-        'count' => 5,
+        'count' => 3,
         'location' => '',
-        'pagination' => false, // here we made, that user can choose by himself whether he wants to paginate
+        'pagination' => 'off', // if it is false - turned on, true - turned off (doesn't make sense, so we make off) here we made, that user can choose by himself whether he wants to paginate
     ), $atts );
 
+    $pagination = $atts['pagination'] == 'on' ? false : true; // small if statement if atts['pag..] is on - then make it false else true
     $paged = get_query_var('paged') ? get_query_var('paged') : 1;
     $args = array(
         'post_type'     => 'job',
         'post_status'   => 'publish', // only published posts
-        'no_found_rows' => $atts['pagination'], // here we made, that user can choose by himself whether he wants to paginate
+        'no_found_rows' => $pagination, // here we made, that user can choose by himself whether he wants to paginate
         'posts_per_page'=> $atts['count'],
         'paged'         => $paged,
         'tax_query'     => array( // multidimensional array setup
@@ -77,7 +78,7 @@ function dwwp_list_job_by_location( $atts, $content = null) {
         while($jobs_by_location->have_posts()) : $jobs_by_location->the_post();  // while we have posts we want to do smthng,  have_posts()/the_post() - wp functions
             global $post; // this var exists in wp
 
-            $deadline = get_post_meta(get_the_ID(), 'aplication_deadline', true); // our fields are being saved as post meta, so if we want to get them, we need get_post_meta() - wp function
+            $deadline = get_post_meta(get_the_ID(), 'application_deadline', true); // our fields are being saved as post meta, so if we want to get them, we need get_post_meta() - wp function
             $title = get_the_title();
             $slug = get_permalink();
             $display_by_location .= '<li class="job-listing">';
@@ -89,9 +90,23 @@ function dwwp_list_job_by_location( $atts, $content = null) {
         $display_by_location .= '</ul>';
         $display_by_location .= '</div>';
 
+        else:
+        $display_by_location = sprintf(__('<p class="job-error">Sorry, no jobs listed in %s were found'), esc_html__(ucwords(str_replace('-', ' ', $atts['location']))));
     endif;
 
     wp_reset_postdata();
+
+    if($jobs_by_location->max_num_pages > 1 && is_page()) { // now we are displaying 3 pages, if there was only 3 pages max_num_pages would be = 1 (means one page)
+        $display_by_location .= '<nav class="prev-next-posts">';
+        $display_by_location .= '<div class="nav-previous">';
+        $display_by_location .= get_next_posts_link(__('<span class="meta-nav">&larr;</span>Previous'), $jobs_by_location->max_num_pages); // &larr - left arrow symbol, doesn't work on the homepage!!
+        $display_by_location .= '</div>';
+        $display_by_location .= '<nav class="next-posts-link">';
+        $display_by_location .= '<div class="nav-previous">';
+        $display_by_location .= get_previous_posts_link(__('<span class="meta-nav">&rarr;</span>Next')); // &rarr - right arrow symbol
+        $display_by_location .= '</div>';
+        $display_by_location .= '</nav>';
+    }
 
     return $display_by_location;
 
