@@ -93,3 +93,29 @@ function dwwp_register_taxonomy() {
     register_taxonomy('location', 'job', $args);
 }
 add_action('init', 'dwwp_register_taxonomy');
+
+function dwwp_load_templates($original_template) {
+
+    if(get_query_var('post_type') !== 'job'){ // checking if the query post-type equals jobs, exit out of this function
+        return;
+    }
+    if(is_archive() || is_search()) { // checking if we are on an archive or a search page
+        if(file_exists(get_stylesheet_directory(). '/archive-job.php')) {
+            return get_stylesheet_directory() . '/archive-job.php';
+        } else {
+            return plugin_dir_path(__FILE__) . 'templates/archive-job.php';
+        }
+    } else {
+        if(file_exists(get_stylesheet_directory(). '/single-job.php')) {
+            return get_stylesheet_directory() . '/single-job.php';
+        } else {
+            return plugin_dir_path(__FILE__) . 'templates/archive-job.php';
+        }
+    }
+    return $original_template;
+}
+add_action('template_include', 'dwwp_load_templates'); // template_include - safest, best hook
+
+
+
+
