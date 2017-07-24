@@ -36,3 +36,64 @@ function dwwp_job_taxonomy_list($atts, $content = null )
     return $displayList;
 }
 add_shortcode('job_location_list', "dwwp_job_taxonomy_list");
+
+function dwwp_list_job_by_location( $atts, $content = null) {
+
+    if(!isset($atts['location'])) {
+        return '<p class="job-error">You must provide a location for this shortcode to work</p>';
+    }
+    $atts = shortcode_atts( array(
+        'title' => 'Current Job Openings in',
+        'count' => 5,
+        'location' => '',
+        'pagination' => false, // here we made, that user can choose by himself whether he wants to paginate
+    ), $atts );
+
+    $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+    $args = array(
+        'post_type'     => 'job',
+        'post_status'   => 'publish', // only published posts
+        'no_found_rows' => $atts['pagination'], // here we made, that user can choose by himself whether he wants to paginate
+        'posts_per_page'=> $atts['count'],
+        'paged'         => $paged,
+        'tax_query'     => array( // multidimensional array setup
+            array(
+                'taxonomy' => 'location',
+                'field'    => 'slug',
+                'terms'    => $atts['location'], // we allow the user to determine this
+            ),
+        )
+    );
+
+    $jobs_by_location = new WP_Query($args); // $jobs_by.. - just a given name
+
+    if($jobs_by_location->have_posts()) :
+        $location = str_replace('_', ' ', $atts['location']);
+
+        $display_by_location = '<div id="jobs-by-location">';
+        $display_by_location .= '<h4>' . esc_html__($atts['title']) . '&nbsp' . esc_html__(ucwords($location)) . '</h4>'; // ucwords() - first letter uppercase
+        $display_by_location .= '<ul>';
+
+        while($jobs_by_location->have_posts()) : $jobs_by_location->the_post();  // while we have posts we want to do smthng,  have_posts()/the_post() - wp functions
+            global $post; // this var exists in wp
+
+            $deadline = get_post_meta(get_the_ID(), 'aplication_deadline', true); // our fields are being saved as post meta, so if we want to get them, we need get_post_meta() - wp function
+            $title = get_the_title();
+            $slug = get_permalink();
+            $display_by_location .= '<li class="job-listing">';
+            $display_by_location .= sprintf( '<a href="%s">%s</a>&nbsp&nbsp', esc_url( $slug ), esc_html__( $title ) );
+            $display_by_location .= '<span>' . esc_html( $deadline ) . '</span>'; // will output deadline date
+            $display_by_location .= '</li>';
+
+            endwhile;
+        $display_by_location .= '</ul>';
+        $display_by_location .= '</div>';
+
+    endif;
+
+    wp_reset_postdata();
+
+    return $display_by_location;
+
+}
+add_shortcode('jobs_by_location', 'dwwp_list_job_by_location');
